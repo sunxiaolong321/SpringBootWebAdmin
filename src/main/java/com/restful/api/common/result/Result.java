@@ -17,7 +17,6 @@ public class Result implements Serializable {
     private Object data;
 
     public Result() {
-
     }
 
     public Result(Integer code, String msg) {
@@ -28,6 +27,13 @@ public class Result implements Serializable {
     public static Result success() {
         Result result = new Result();
         result.setResultCode(ResultCode.SUCCESS);
+        return result;
+    }
+
+    public static Result success(Object data) {
+        Result result = new Result();
+        result.setResultCode(ResultCode.SUCCESS);
+        result.setData(data);
         return result;
     }
 

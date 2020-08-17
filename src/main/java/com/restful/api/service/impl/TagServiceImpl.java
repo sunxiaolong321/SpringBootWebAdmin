@@ -62,11 +62,13 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagVO> findAllDetail() {
-        return tagRepository.findAllDetail();
+//        return tagRepository.findAllDetail();
+        return null;
     }
 
     @Override
     public TagVO getTagDetail(Integer tagId) {
-        return tagRepository.getTagDetail(tagId);
+//        return tagRepository.getTagDetail(tagId);
+        return null;
     }
 }

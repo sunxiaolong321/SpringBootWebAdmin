@@ -1,14 +1,18 @@
 package com.restful.api.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.restful.api.common.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "sys_user")

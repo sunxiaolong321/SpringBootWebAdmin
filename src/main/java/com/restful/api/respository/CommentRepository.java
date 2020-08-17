@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository {
-
     List<Comment> findByArticleAndLevelOrderByCreateDateDesc(Article a, String level);
 }

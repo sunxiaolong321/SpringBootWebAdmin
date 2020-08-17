@@ -1,10 +1,8 @@
 package com.restful.api.service.impl;
 
-import com.restful.api.common.util.UserUtils;
 import com.restful.api.entity.Article;
 import com.restful.api.entity.Category;
 import com.restful.api.entity.Tag;
-import com.restful.api.entity.User;
 import com.restful.api.respository.ArticleRepository;
 import com.restful.api.service.ArticleService;
 import com.restful.api.vo.ArticleVo;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -36,13 +35,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> findAll() {
+    public Iterable<Article> findAll() {
         return articleRepository.findAll();
     }
 
     @Override
     public Article getArticleById(Integer id) {
-        return articleRepository.getOne(id);
+        Optional<Article> article = articleRepository.findById(id);
+        return article.orElse(new Article());
     }
 
     @Override
@@ -51,11 +51,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public Integer saveArticle(Article article) {
 
-        User currentUser = UserUtils.getCurrentUser();
-
-        if (null != currentUser) article.setAuthor(currentUser);
+//        User currentUser = UserUtils.getCurrentUser();
+//
+//        if (null != currentUser) article.setAuthor(currentUser);
 //        article.setWeight(Article.Article_Common);
         return articleRepository.save(article).getId();
     }
@@ -63,15 +64,16 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public Integer updateArticle(Article article) {
-        Article oldArticle = articleRepository.getOne(article.getId());
-
-        oldArticle.setTitle(article.getTitle());
-        oldArticle.setSummary(article.getSummary());
-        oldArticle.setBody(article.getBody());
-        oldArticle.setCategory(article.getCategory());
-        oldArticle.setTags(article.getTags());
-
-        return oldArticle.getId();
+        Optional<Article> oldArticle = articleRepository.findById(article.getId());
+        if (oldArticle.isPresent()) {
+            oldArticle.get().setTitle(article.getTitle());
+            oldArticle.get().setSummary(article.getSummary());
+            oldArticle.get().setBody(article.getBody());
+            oldArticle.get().setCategory(article.getCategory());
+            oldArticle.get().setTags(article.getTags());
+            return oldArticle.get().getId();
+        }
+        return -1;
     }
 
     @Override
@@ -97,9 +99,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public Article getArticleAndAddViews(Integer id) {
-        Article article = articleRepository.getOne(id);
-        article.setViewCounts(article.getViewCounts() + 1);
-        return article;
+        Optional<Article> article = articleRepository.findById(id);
+        if (article.isPresent()) {
+            article.get().setViewCounts(article.get().getViewCounts() + 1);
+            return article.get();
+        }
+        return new Article();
     }
 
     @Override

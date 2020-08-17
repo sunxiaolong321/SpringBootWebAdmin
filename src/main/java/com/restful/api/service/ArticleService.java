@@ -12,7 +12,7 @@ public interface ArticleService {
 
     List<Article> listArticles(ArticleVo article, PageVo page);
 
-    List<Article> findAll();
+    Iterable<Article> findAll();
 
     Article getArticleById(Integer id);
 

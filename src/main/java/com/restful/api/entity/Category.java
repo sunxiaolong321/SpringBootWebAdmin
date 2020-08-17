@@ -1,5 +1,6 @@
 package com.restful.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.restful.api.common.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "me_category")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Category extends BaseEntity<Integer> {
     private static final long serialVersionUID = 5025313969040054182L;
 

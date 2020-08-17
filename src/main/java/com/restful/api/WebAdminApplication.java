@@ -2,11 +2,10 @@ package com.restful.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@Import(IdOrderGenerate.class)
+//@Import(IdOrderGenerate.class)
 @EnableJpaAuditing
 public class WebAdminApplication {
 

@@ -1,11 +1,12 @@
 package com.restful.api.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.restful.api.common.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +19,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "me_article")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Article extends BaseEntity<Integer> {
     public static final int Article_TOP = 1;
     public static final int Article_Common = 0;
@@ -30,7 +33,7 @@ public class Article extends BaseEntity<Integer> {
     @Column(name = "summary", length = 100, nullable = false)
     private String summary;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id")
     private User author;
 
@@ -58,14 +61,11 @@ public class Article extends BaseEntity<Integer> {
     /**
      * 创建时间
      */
-    @JSONField(format = "yyyy.MM.dd HH:mm")
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(updatable = false)
     private Date createDate;
 
-    @JSONField(format = "yyyy.MM.dd HH:mm")
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date modifiedDate;
 
 }
