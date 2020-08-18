@@ -1,12 +1,11 @@
 package com.restful.api.respository;
 
-import com.restful.api.entity.Article;
 import com.restful.api.entity.Comment;
+import com.restful.api.respository.wapper.CategoryWrapper;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface CommentRepository {
-    List<Comment> findByArticleAndLevelOrderByCreateDateDesc(Article a, String level);
+public interface CommentRepository extends CrudRepository<Comment, Integer>, CategoryWrapper {
+
 }

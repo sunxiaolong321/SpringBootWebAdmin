@@ -8,18 +8,11 @@ import java.util.Optional;
 
 public interface TagService {
     Iterable<Tag> findAll();
-
     Optional<Tag> getTagById(Integer id);
-
     Integer saveTag(Tag tag);
-
     Integer updateTag(Tag tag);
-
     void deleteTagById(Integer id);
-
     List<Tag> listHotTags(int limit);
-
     List<TagVO> findAllDetail();
-
     TagVO getTagDetail(Integer tagId);
 }

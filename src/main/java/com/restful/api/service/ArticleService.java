@@ -7,7 +7,6 @@ import com.restful.api.vo.PageVo;
 import java.util.List;
 
 public interface ArticleService {
-
     List<Article> listArticles(PageVo page);
 
     List<Article> listArticles(ArticleVo article, PageVo page);

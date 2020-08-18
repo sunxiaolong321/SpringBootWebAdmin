@@ -4,6 +4,7 @@ import com.restful.api.entity.Article;
 import com.restful.api.entity.Category;
 import com.restful.api.entity.Tag;
 import com.restful.api.respository.wapper.ArticleWrapper;
+import com.restful.api.respository.wapper.CategoryWrapper;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +25,6 @@ public interface ArticleRepository extends CrudRepository<Article, Integer>, Art
     @Query(value = "select * from me_article order by create_date desc limit :limit", nativeQuery = true)
     List<Article> findOrderByCreateDateAndLimit(@Param("limit") int limit);
 
+    interface CategoryRepository extends CrudRepository<Category, Integer>, CategoryWrapper {
+    }
 }

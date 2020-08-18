@@ -42,7 +42,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getArticleById(Integer id) {
         Optional<Article> article = articleRepository.findById(id);
-        return article.orElse(new Article());
+        return article.orElseGet(Article::new);
     }
 
     @Override
