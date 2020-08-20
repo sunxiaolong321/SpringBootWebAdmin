@@ -11,8 +11,6 @@ import com.restful.api.entity.ArticleBody;
 import com.restful.api.entity.Tag;
 import com.restful.api.entity.User;
 import com.restful.api.service.ArticleService;
-import com.restful.api.service.TagService;
-import com.restful.api.vo.ArticleVo;
 import com.restful.api.vo.PageVo;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +23,10 @@ import java.util.List;
 public class ArticleController {
 
     private ArticleService articleService;
-    private TagService tagService;
 
     @Autowired
     public void setArticleService(ArticleService articleService) {
         this.articleService = articleService;
-    }
-
-    @Autowired
-    public void setTagService(TagService tagService) {
-        this.tagService = tagService;
     }
 
     @GetMapping
@@ -44,10 +36,8 @@ public class ArticleController {
                     @FastJsonFilter(clazz = Tag.class, props = {"id", "avatar"})},
             include = {@FastJsonFilter(clazz = User.class, props = {"nickname"})})
     @LogAnnotation(module = "文章", operation = "获取所有文章")
-    public Result listArticles(ArticleVo article, PageVo page) {
-        System.out.println(article);
-        System.out.println(page);
-        List<Article> articles = articleService.listArticles(article, page);
+    public Result listArticles(@RequestBody PageVo page) {
+        List<Article> articles = articleService.listArticles(page);
         return Result.success(articles);
     }
 

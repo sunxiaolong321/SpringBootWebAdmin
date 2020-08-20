@@ -57,11 +57,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryVO> findAllDetail() {
-        return categoryRepository.findAllDetail();
+//        return categoryRepository.findAllDetail();
+        return null;
     }
 
     @Override
     public CategoryVO getCategoryDetail(Integer categoryId) {
-        return categoryRepository.getCategoryDetail(categoryId);
+//        return categoryRepository.getCategoryDetail(categoryId);
+        return null;
     }
 }

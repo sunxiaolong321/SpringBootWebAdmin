@@ -1,4 +1,4 @@
-package com.restful.api.Serializer;
+package com.restful.api.common.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -17,7 +17,7 @@ import java.util.Date;
 @JsonComponent
 public class DateFormatConfig {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 日期格式化

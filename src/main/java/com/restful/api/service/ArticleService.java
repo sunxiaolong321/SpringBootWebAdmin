@@ -9,8 +9,6 @@ import java.util.List;
 public interface ArticleService {
     List<Article> listArticles(PageVo page);
 
-    List<Article> listArticles(ArticleVo article, PageVo page);
-
     Iterable<Article> findAll();
 
     Article getArticleById(Integer id);

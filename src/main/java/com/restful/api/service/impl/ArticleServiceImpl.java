@@ -26,12 +26,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> listArticles(PageVo page) {
-        return articleRepository.listArticles(page);
-    }
 
-    @Override
-    public List<Article> listArticles(ArticleVo article, PageVo page) {
-        return articleRepository.listArticles(article, page);
+        return articleRepository.listArticles(page);
     }
 
     @Override
@@ -119,6 +115,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleVo> listArchives() {
-        return articleRepository.listArchives();
+        return null;
     }
 }
