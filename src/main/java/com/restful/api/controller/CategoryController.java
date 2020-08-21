@@ -1,5 +1,7 @@
 package com.restful.api.controller;
 
+import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import com.restful.api.common.annotation.LogAnnotation;
 import com.restful.api.common.constant.Base;
 import com.restful.api.common.constant.ResultCode;
@@ -15,13 +17,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/category")
+@RequestMapping(value = "/api/category")
 public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
     public void setCategoryService(CategoryService categoryService) {
         this.categoryService = categoryService;
+    }
+
+    @GetMapping
+    @LogAnnotation(module = "文章分类", operation = "获取所有文章大概")
+    @FastJsonView(include = {@FastJsonFilter(clazz = Category.class, props = {"name", "amount"})})
+    public Result listCategoryIntroduction() {
+        Iterable<Category> categories = categoryService.findAll();
+        return Result.success(categories);
     }
 
     @GetMapping("/detail")

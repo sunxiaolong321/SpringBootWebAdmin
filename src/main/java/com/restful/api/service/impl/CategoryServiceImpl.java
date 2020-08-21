@@ -42,8 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Integer updateCategory(Category category) {
         Optional<Category> oldCategory = categoryRepository.findById(category.getId());
         if (oldCategory.isPresent()) {
-            oldCategory.get().setCategoryName(category.getCategoryName());
-            oldCategory.get().setAvatar(category.getAvatar());
+            oldCategory.get().setName(category.getName());
             oldCategory.get().setDescription(category.getDescription());
         }
         return -1;

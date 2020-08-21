@@ -4,6 +4,8 @@ import com.restful.api.entity.Article;
 import com.restful.api.entity.Category;
 import com.restful.api.entity.Tag;
 import com.restful.api.respository.ArticleRepository;
+import com.restful.api.respository.CategoryRepository;
+import com.restful.api.respository.TagRepository;
 import com.restful.api.service.ArticleService;
 import com.restful.api.vo.ArticleVo;
 import com.restful.api.vo.PageVo;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,15 +21,26 @@ import java.util.Optional;
 public class ArticleServiceImpl implements ArticleService {
 
     private ArticleRepository articleRepository;
+    private CategoryRepository categoryRepository;
+    private TagRepository tagRepository;
+
+    @Autowired
+    public void setCategoryRepository(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Autowired
     public void setArticleRepository(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
+    @Autowired
+    public void setTagRepository(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
+
     @Override
     public List<Article> listArticles(PageVo page) {
-
         return articleRepository.listArticles(page);
     }
 
@@ -49,11 +63,26 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public Integer saveArticle(Article article) {
+        // 设置summary
+        if (article.getSummary().length() < 1) {
+            article.setSummary(article.getBody().getContent().substring(0, 50));
+        }
+        // 保存category
+        String categoryName = article.getCategory().getName();
+        if (categoryRepository.existsByName(categoryName)) {
+            Category category = categoryRepository.findCategoryByName(categoryName);
+            category.setAmount(category.getAmount() + 1);
+            article.setCategory(category);
+        }
 
-//        User currentUser = UserUtils.getCurrentUser();
-//
-//        if (null != currentUser) article.setAuthor(currentUser);
-//        article.setWeight(Article.Article_Common);
+        // 保存tag
+        List<Tag> tags = article.getTags();
+        List<Tag> newTag = new ArrayList<>();
+        for (Tag tag : tags) {
+            if (tagRepository.existsByTagName(tag.getTagName())) tag = tagRepository.findTagByTagName(tag.getTagName());
+            newTag.add(tag);
+        }
+        article.setTags(newTag);
         return articleRepository.save(article).getId();
     }
 
@@ -109,7 +138,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> listNewArticles(int limit) {
+    public Iterable<Article> listNewArticles(int limit) {
         return articleRepository.findOrderByCreateDateAndLimit(limit);
     }
 

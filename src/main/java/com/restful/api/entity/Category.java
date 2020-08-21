@@ -1,5 +1,6 @@
 package com.restful.api.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.restful.api.common.entity.BaseEntity;
 import lombok.Getter;
@@ -18,10 +19,10 @@ public class Category extends BaseEntity<Integer> {
     private static final long serialVersionUID = 5025313969040054182L;
 
     @Column(nullable = false)
-    private String categoryName;
+    private String name;
 
+    @JSONField
     private String description;
 
-    @Column(nullable = false)
-    private String avatar;
+    private Integer amount = 0;
 }

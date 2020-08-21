@@ -9,12 +9,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 @Getter
 @Setter
 @Entity
 @Table(name = "me_tag")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class Tag extends BaseEntity<Integer> {
 
     private static final long serialVersionUID = 5025313969040054182L;

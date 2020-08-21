@@ -15,4 +15,8 @@ public interface TagRepository extends CrudRepository<Tag, Integer>, TagWrapper 
             + "right join me_tag t on t.id = at.tag_id "
             + "group by t.id order by count(at.tag_id) desc limit :limit", nativeQuery = true)
     List<Tag> listHotTagsByArticleUse(@Param("limit") int limit);
+
+    Tag findTagByTagName(@Param("tagName") String tagName);
+
+    Boolean existsByTagName(@Param("tagName") String tagName);
 }

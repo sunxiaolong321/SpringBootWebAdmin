@@ -29,7 +29,7 @@ public interface ArticleService {
 
     List<Article> listHotArticles(int limit);
 
-    List<Article> listNewArticles(int limit);
+    Iterable<Article> listNewArticles(int limit);
 
     List<ArticleVo> listArchives();
 }

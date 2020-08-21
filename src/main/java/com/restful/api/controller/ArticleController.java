@@ -6,12 +6,8 @@ import com.restful.api.common.annotation.LogAnnotation;
 import com.restful.api.common.constant.Base;
 import com.restful.api.common.constant.ResultCode;
 import com.restful.api.common.result.Result;
-import com.restful.api.entity.Article;
-import com.restful.api.entity.ArticleBody;
-import com.restful.api.entity.Tag;
-import com.restful.api.entity.User;
+import com.restful.api.entity.*;
 import com.restful.api.service.ArticleService;
-import com.restful.api.vo.PageVo;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/articles")
+@RequestMapping(value = "/api/articles")
 public class ArticleController {
-
     private ArticleService articleService;
 
     @Autowired
@@ -29,39 +24,29 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @GetMapping
-    @FastJsonView(
-            exclude = {
-                    @FastJsonFilter(clazz = Article.class, props = {"body", "category", "comments"}),
-                    @FastJsonFilter(clazz = Tag.class, props = {"id", "avatar"})},
-            include = {@FastJsonFilter(clazz = User.class, props = {"nickname"})})
-    @LogAnnotation(module = "文章", operation = "获取所有文章")
-    public Result listArticles(@RequestBody PageVo page) {
-        List<Article> articles = articleService.listArticles(page);
-        return Result.success(articles);
-    }
-
     @GetMapping("/hot")
-    @FastJsonView(include = {@FastJsonFilter(clazz = Article.class, props = {"id", "title"})})
+    @FastJsonView(include = {@FastJsonFilter(clazz = Article.class, props = {"id", "title", "summary", "category", "viewCounts", "createDate"}),
+            @FastJsonFilter(clazz = Category.class, props = {"name"})})
     @LogAnnotation(module = "文章", operation = "获取最热文章")
     public Result listHotArticles() {
-        int limit = 6;
+        int limit = 10;
         List<Article> articles = articleService.listHotArticles(limit);
         return Result.success(articles);
     }
 
     @GetMapping("/new")
-    @FastJsonView(include = {@FastJsonFilter(clazz = Article.class, props = {"id", "title"})})
+    @FastJsonView(include = {@FastJsonFilter(clazz = Article.class, props = {"id", "title", "category", "summary", "viewCounts", "createDate"}),
+            @FastJsonFilter(clazz = Category.class, props = {"name"})})
     @LogAnnotation(module = "文章", operation = "获取最新的文章")
     public Result listNewArticles() {
-        int limit = 6;
-        List<Article> articles = articleService.listNewArticles(6);
+        Iterable<Article> articles = articleService.listNewArticles(10);
         return Result.success(articles);
     }
 
     @GetMapping("/{id}")
-    @FastJsonView(exclude = {@FastJsonFilter(clazz = Article.class, props = {"comments"}),
-            @FastJsonFilter(clazz = ArticleBody.class, props = {"contentHtml"})})
+    @FastJsonView(include = {@FastJsonFilter(clazz = Article.class, props = {"title", "category", "ArticleBody", "createDate"}),
+            @FastJsonFilter(clazz = Category.class, props = {"name"}),
+            @FastJsonFilter(clazz = ArticleBody.class, props = {"name", "content"})})
     @LogAnnotation(module = "文章", operation = "根据id获取文章")
     public Result getArticleById(@PathVariable("id") Integer id) {
         Result r = new Result();
@@ -102,7 +87,7 @@ public class ArticleController {
     @GetMapping("/tag/{id}")
     @FastJsonView(
             exclude = {
-                    @FastJsonFilter(clazz = Article.class, props = {"body", "category", "comments"}),
+                    @FastJsonFilter(clazz = Article.class, props = {"body", "category", "comments",}),
                     @FastJsonFilter(clazz = Tag.class, props = {"id", "avatar"})},
             include = {@FastJsonFilter(clazz = User.class, props = {"nickname"})})
     @LogAnnotation(module = "文章", operation = "根据标签获取文章")
